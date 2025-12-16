@@ -9,6 +9,7 @@ import 'package:latlong2/latlong.dart' show LatLng;
 abstract class ClassicModeDefinition extends BaseModeDefinition {
   List<OsmChange> nearestPOI = [];
 
+  ClassicModeDefinition();
   ClassicModeDefinition.fromPlugin(EveryDoorApp plugin);
 
   @override

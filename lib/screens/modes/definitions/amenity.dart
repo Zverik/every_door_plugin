@@ -1,3 +1,4 @@
+import 'package:every_door_plugin/helpers/multi_icon.dart';
 import 'package:every_door_plugin/models/amenity.dart';
 import 'package:every_door_plugin/models/plugin.dart';
 import 'package:every_door_plugin/plugins/interface.dart';
@@ -12,9 +13,13 @@ abstract class AmenityModeDefinition extends BaseModeDefinition {
   List<OsmChange> nearestPOI = [];
   List<LatLng> otherPOI = [];
 
+  AmenityModeDefinition();
   AmenityModeDefinition.fromPlugin(EveryDoorApp app);
 
   int get maxTileCount => _kAmenitiesInList;
+
+  @override
+  MultiIcon getIcon(BuildContext context, bool outlined) => MultiIcon();
 
   @override
   updateNearest(LatLngBounds bounds) async {

@@ -14,7 +14,7 @@ abstract class MicromappingModeDefinition extends BaseModeDefinition {
   List<OsmChange> nearestPOI = [];
   List<LatLng> otherPOI = [];
   bool enableZoomingIn = true;
-  LegendController get legend;
+  LegendController legend = LegendController();
 
   MicromappingModeDefinition.fromPlugin(EveryDoorApp app);
 
