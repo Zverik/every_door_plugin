@@ -171,7 +171,8 @@ class Packager {
       if (!dir.existsSync()) return result;
       for (final file in dir.listSync()) {
         if (file is File && file.path.endsWith('.dart')) {
-          final fileData = file.readAsStringSync();
+          String fileData = file.readAsStringSync();
+          fileData = fileData.replaceAll('package:every_door_plugin/', 'package:every_door/');
           final rel = p
               .relative(file.path, from: locations.codeRoot!.path)
               .replaceAll('\\', '/');

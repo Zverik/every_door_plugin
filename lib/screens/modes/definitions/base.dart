@@ -14,8 +14,8 @@ abstract class BaseModeDefinition extends ChangeNotifier {
 
   bool isOurKind(OsmChange element) => false;
 
-  Iterable<Imagery> get overlays;
-  Iterable<MapButton> get buttons;
+  final Iterable<Imagery> overlays = [];
+  final Iterable<MapButton> buttons = [];
 
   void addMapButton(MapButton button) {
   }

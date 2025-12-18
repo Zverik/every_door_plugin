@@ -1,0 +1,35 @@
+name: panoramax_demo
+description: "Panoramax Photo Browser Demo"
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.9.0
+  flutter: "^3.35.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  every_door_plugin:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+dependency_overrides:
+  dart_eval:
+    path: ../../dart_eval
+    #git:
+    #  url: https://github.com/Zverik/dart_eval.git
+    #  ref: operators
+  flutter_eval:
+    git:
+      url: https://github.com/Zverik/flutter_eval.git
+      ref: no_icons
+
+every_door:
+  icon: panoramax_favicon.svg
+  accesses: https://panoramax.openstreetmap.fr/api/
+  api: 1.2
