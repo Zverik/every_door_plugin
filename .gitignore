@@ -32,5 +32,4 @@ migrate_working_dir/
 
 # My files
 /dist/
-/plugin/
 *.edp

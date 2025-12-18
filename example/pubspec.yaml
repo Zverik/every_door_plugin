@@ -30,6 +30,11 @@ dependency_overrides:
       ref: no_icons
 
 every_door:
+  description: |
+    A test plugin for code functionality. Adds a "P" button to
+    the micromapping mode, and displays camera markers when there
+    are photos on Panomarax French instance. When tapping on a photo,
+    you can see it in a popup panel.
   icon: panoramax_favicon.svg
   accesses: https://panoramax.openstreetmap.fr/api/
   api: 1.2
