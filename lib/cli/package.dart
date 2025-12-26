@@ -7,9 +7,6 @@ import 'package:archive/archive.dart';
 import 'package:dart_eval/dart_eval.dart';
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:every_door_plugin/helpers/yaml_map.dart';
-import 'package:every_door_plugin/plugins/bindings/every_door_eval.dart';
-import 'package:flutter_eval/flutter_eval.dart';
-import 'package:flutter_map_eval/flutter_map_eval.dart' as fme;
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
@@ -126,7 +123,7 @@ class Packager {
   }
 
   Future<void> loadBindings(Compiler compiler, String name) async {
-    final packagePath = 'package:every_door_plugin/bindings/$name.json';
+    final packagePath = 'package:every_door_plugin/bindings/${name}_eval.json';
     final packageUri = await Isolate.resolvePackageUri(Uri.parse(packagePath));
     if (packageUri == null) {
       throw FileSystemException("Cannot find $packagePath");
@@ -159,12 +156,9 @@ class Packager {
     packageName = pubspecData.toMap()['name'];
 
     final compiler = Compiler();
-    compiler.addPlugin(flutterEvalPlugin);
-    for (final p in fme.plugins) {
-      compiler.addPlugin(p);
+    for (final name in ['flutter', 'flutter_map', 'every_door']) {
+      await loadBindings(compiler, name);
     }
-    compiler.addPlugin(EveryDoorPlugin());
-    // await loadBindings(compiler, 'flutter_eval');
 
     Map<String, String> addFiles(Directory dir) {
       final result = <String, String>{};

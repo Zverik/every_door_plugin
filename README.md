@@ -38,10 +38,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  every_door_plugin: ^1.0.0
+  every_door_plugin: ^1.2.0
 ```
 
-Add `every_door_plugin: 1.0.0` to the dependencies in `pubspec.yaml`. Also mind that those
+Add `every_door_plugin: 1.2.0` to the dependencies in `pubspec.yaml`. Also mind that those
 keys will be copied to the plugin metadata:
 
 * `name` → `id`
@@ -56,6 +56,9 @@ the version would be `0.3`, so there is no point in using patch versions).
 You can also add an `every_door` section and straight write 
 [`plugin.yaml`](https://every-door.app/plugins/metadata/) contents there.
 The pubspec top values still have the priority.
+
+Note that for publishing to EDPR, you would need the `description` key, so you
+can't get around adding that section. See [the example](example/pubspec.yaml).
 
 Create a `plugin` directory for any static files you will need packaged.
 When you refer a file like `icons/bus.svg`, whether from the yaml file

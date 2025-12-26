@@ -31,7 +31,7 @@ dependency_overrides:
   dart_eval:
     git:
       url: https://github.com/Zverik/dart_eval.git
-      ref: operators
+      ref: fix_async_bridge_method
   flutter_eval:
     git:
       url: https://github.com/Zverik/flutter_eval.git
