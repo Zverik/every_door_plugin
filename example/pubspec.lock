@@ -121,14 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  cross_file:
+  country_coder:
     dependency: transitive
     description:
-      name: cross_file
-      sha256: "701dcfc06da0882883a2657c445103380e53e647060ad8d9dfb710c100996608"
+      name: country_coder
+      sha256: "3cd6f7ba2fb20aeecae41143559c6974a663c7fa1dd1cf020a3e9803a84e2c6c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.5+1"
+    version: "1.2.0"
   crypto:
     dependency: transitive
     description:
@@ -146,12 +146,13 @@ packages:
     source: hosted
     version: "1.2.0"
   dart_eval:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../dart_eval"
-      relative: true
-    source: path
-    version: "0.8.2"
+      name: dart_eval
+      sha256: c541adaa17530870b93fc853b5481382163ad44a246df3582c59afd899bc8214
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.3"
   dart_polylabel2:
     dependency: transitive
     description:
@@ -272,12 +273,11 @@ packages:
   flutter_map_eval:
     dependency: transitive
     description:
-      path: "."
-      ref: main
-      resolved-ref: "9511517f84ab477cf9354899cadb4cc6a7791e87"
-      url: "https://github.com/Zverik/flutter_map_eval.git"
-    source: git
-    version: "0.0.1"
+      name: flutter_map_eval
+      sha256: "3789607ac8dec426fe28eccf0014074e45f2a052d574ad7b5d065893152ae8f3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   flutter_map_geojson2:
     dependency: transitive
     description:
@@ -480,14 +480,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   package_config:
     dependency: transitive
     description:
@@ -616,6 +608,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.7"
+  rbush:
+    dependency: transitive
+    description:
+      name: rbush
+      sha256: "48b683421b4afb43a642f82c6aa31911e54f3069143d31c7d33cbe329df13403"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   responsive_grid_list:
     dependency: transitive
     description:
@@ -624,22 +624,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
-  share_plus:
-    dependency: transitive
-    description:
-      name: share_plus
-      sha256: d7dc0630a923883c6328ca31b89aa682bacbf2f8304162d29f7c6aaff03a27a1
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.1.0"
-  share_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: share_plus_platform_interface
-      sha256: "88023e53a13429bd65d8e85e11a9b484f49d4c190abbd96c7932b74d6927cc9a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -861,14 +845,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  win32:
-    dependency: transitive
-    description:
-      name: win32
-      sha256: d7cb55e04cd34096cd3a79b3330245f54cb96a370a1c27adb3c84b917de8b08e
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.15.0"
   wkt_parser:
     dependency: transitive
     description:

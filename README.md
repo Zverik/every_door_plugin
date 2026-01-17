@@ -67,6 +67,9 @@ or from the code, it will be expected in `plugin/icons/bus.svg`.
 The code goes into the `lib` directory, with the `lib/main.dart` for the main code.
 It can include other dart files from the same directory or sub-directories.
 
+Besides `flutter` and `every_door_plugin` packages, you can also use anything
+listed in [this description](https://pub.dev/packages/flutter_map_eval).
+
 ## Building a plugin
 
 Having added this package as a dependency, type this in the console (e.g. in Android Studio
