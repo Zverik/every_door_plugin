@@ -1,5 +1,13 @@
+import 'dart:ui' show Locale;
+
+import 'package:every_door_plugin/helpers/editor_fields.dart';
+import 'package:every_door_plugin/models/amenity.dart';
+import 'package:every_door_plugin/models/preset.dart';
 import 'package:every_door_plugin/screens/modes/definitions/base.dart';
 import 'package:latlong2/latlong.dart' show LatLng;
+
+typedef EditorFieldsCallback = Future<List<EditorFields>> Function(
+    List<EditorFields>, OsmChange, Preset, Locale);
 
 /// Plugin events wrapper. Use this class to listen to events. Listeners
 /// are automatically deactivated when the plugin is inactive. All callback
@@ -15,4 +23,8 @@ class PluginEvents {
 
   /// Invoked when the "download" button is pressed.
   void onDownload(Function(LatLng) callback) {}
+
+  /// Invoked when the editor pane prepares its fields. Here you can
+  /// insert or replace some fields, even the entire page.
+  void onEditorFields(EditorFieldsCallback callback) {}
 }
