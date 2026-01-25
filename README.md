@@ -38,10 +38,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  every_door_plugin: ^1.2.0
+  every_door_plugin: ^0.1.0
 ```
 
-Add `every_door_plugin: 1.2.0` to the dependencies in `pubspec.yaml`. Also mind that those
+Add `every_door_plugin: 0.1.0` to the dependencies in `pubspec.yaml`. Also mind that those
 keys will be copied to the plugin metadata:
 
 * `name` → `id`

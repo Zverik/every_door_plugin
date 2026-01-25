@@ -166,7 +166,10 @@ class Packager {
       for (final file in dir.listSync()) {
         if (file is File && file.path.endsWith('.dart')) {
           String fileData = file.readAsStringSync();
-          fileData = fileData.replaceAll('package:every_door_plugin/', 'package:every_door/');
+          fileData = fileData.replaceAll(
+            'package:every_door_plugin/',
+            'package:every_door/',
+          );
           final rel = p
               .relative(file.path, from: locations.codeRoot!.path)
               .replaceAll('\\', '/');
@@ -190,9 +193,14 @@ class Packager {
     }
 
     final pluginData = await buildPluginYaml(locations);
-    _logger.info('Found plugin "${pluginData['id']}" v${pluginData['version']}');
+    _logger.info(
+      'Found plugin "${pluginData['id']}" v${pluginData['version']}',
+    );
 
-    final dist = locations.dist(pluginData['id'], pluginData['version']);
+    final dist = locations.dist(
+      pluginData['id'],
+      pluginData['version'].toString(),
+    );
     if (dist.existsSync()) {
       _logger.info("Overwriting file ${dist.path}");
       await dist.delete();
@@ -215,7 +223,10 @@ class Packager {
       for (final f in locations.staticPluginRoot!.listSync(recursive: true)) {
         if (f is File) {
           if (p.isWithin(dist.parent.path, f.path)) continue;
-          final path = p.relative(f.path, from: locations.staticPluginRoot!.path);
+          final path = p.relative(
+            f.path,
+            from: locations.staticPluginRoot!.path,
+          );
           if (path == 'plugin.yaml') continue;
           _logger.info('Adding $path');
           zip.add(ArchiveFile.bytes(path, await f.readAsBytes()));
