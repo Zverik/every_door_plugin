@@ -8,7 +8,7 @@ for the development.
 With this package, it's easy: it provides a script that can be executed from anywhere.
 Install it with:
 
-   dart pub global activate every_door_plugin
+    dart pub global activate every_door_plugin
 
 The proper way would be to create a directory for a plugin, and inside it, a `plugin`
 directory with all the files, including `plugin.yaml`. When you run `edp`
