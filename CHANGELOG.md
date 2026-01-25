@@ -1,3 +1,3 @@
-## 1.0.0
+## 0.1.0
 
-* Initial version that can package static plugins.
+* In-progress version that can package things.

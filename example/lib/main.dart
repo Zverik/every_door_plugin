@@ -1,6 +1,5 @@
 import 'dart:convert' show json, utf8;
 
-import 'package:every_door_plugin/helpers/auth/provider.dart';
 import 'package:every_door_plugin/helpers/multi_icon.dart';
 import 'package:every_door_plugin/plugins/every_door_plugin.dart';
 import 'package:every_door_plugin/plugins/ext_overlay.dart';

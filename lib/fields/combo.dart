@@ -2,7 +2,6 @@
 // This file is a part of Every Door, distributed under GPL v3 or later version.
 // Refer to LICENSE file and https://www.gnu.org/licenses/gpl-3.0.html for details.
 import 'package:every_door_plugin/models/amenity.dart';
-import 'package:every_door_plugin/widgets/radio_field.dart';
 import 'package:flutter/material.dart';
 import 'package:every_door_plugin/models/field.dart';
 

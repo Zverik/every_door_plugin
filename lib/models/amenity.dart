@@ -16,7 +16,6 @@ class OsmChange extends ChangeNotifier implements Comparable {
   String? error;
   final String databaseId;
   String? _mainKey;
-  Map<String, String>? _fullTagsCache;
   DateTime updated;
   int? newId; // Not stored: used only during uploading.
 
@@ -34,9 +33,7 @@ class OsmChange extends ChangeNotifier implements Comparable {
        updated = updated ?? DateTime.now(),
        // ignore: prefer_initializing_formals
        element = element, // Force non-null initialization
-       databaseId = databaseId ?? element.id.toString() {
-    _updateMainKey();
-  }
+       databaseId = databaseId ?? element.id.toString();
 
   OsmChange.create({
     required Map<String, String> tags,
@@ -50,9 +47,7 @@ class OsmChange extends ChangeNotifier implements Comparable {
        element = null,
        _deleted = false,
        updated = updated ?? DateTime.now(),
-       databaseId = databaseId ?? '' {
-    _updateMainKey();
-  }
+       databaseId = databaseId ?? '';
 
   OsmChange copy() {
     if (element == null) {
@@ -110,13 +105,6 @@ class OsmChange extends ChangeNotifier implements Comparable {
   String? get mainKey => _mainKey;
 
   void revert() {
-    // Cannot revert a new object
-    if (isNew) return;
-
-    newTags.clear();
-    newLocation = null;
-    _updateMainKey();
-    notifyListeners();
   }
 
   // Tags management
@@ -124,46 +112,16 @@ class OsmChange extends ChangeNotifier implements Comparable {
       newTags.containsKey(k) ? newTags[k] : element?.tags[k];
 
   void operator []=(String k, String? v) {
-    if (v == null || v.isEmpty) {
-      removeTag(k);
-    } else if (element == null || element!.tags[k] != v) {
-      // Silently cut the value.
-      if (v.length > 255) v = v.substring(0, 255);
-      newTags[k] = v;
-    } else if (newTags.containsKey(k)) {
-      newTags.remove(k);
-    }
-    _updateMainKey();
-    notifyListeners();
   }
 
   void removeTag(String key) {
-    if (element != null && element!.tags.containsKey(key)) {
-      newTags[key] = null;
-    } else if (newTags[key] != null) {
-      newTags.remove(key);
-    } else {
-      return;
-    }
-    _updateMainKey();
-    notifyListeners();
   }
 
   void undoTagChange(String key) {
-    if (newTags.containsKey(key)) {
-      newTags.remove(key);
-      _updateMainKey();
-      notifyListeners();
-    }
   }
 
   bool hasTag(String key) => this[key] != null;
   bool changedTag(String key) => newTags.containsKey(key);
-
-  void _updateMainKey() {
-    _fullTagsCache = null;
-    _mainKey = null;
-  }
 
   int calculateAge(String? value) => DateTime.now()
       .difference(
@@ -266,26 +224,5 @@ class OsmChange extends ChangeNotifier implements Comparable {
   int get hashCode => databaseId.hashCode;
 
   @override
-  int compareTo(other) {
-    const kTypeOrder = {
-      OsmElementType.node: 0,
-      OsmElementType.way: 1,
-      OsmElementType.relation: 2,
-    };
-
-    if (other is! OsmChange)
-      throw ArgumentError('OsmChange can be compared only to another change');
-    // Order for uploading: create (n), modify (nwr), delete(rwn).
-    if (isNew) {
-      return other.isNew ? 0 : -1;
-    } else if (isModified && !hardDeleted) {
-      if (other.isNew) return 1;
-      if (other.hardDeleted) return -1;
-      return kTypeOrder[id.type]!.compareTo(kTypeOrder[other.id.type]!);
-    } else {
-      // deleted
-      if (!other.hardDeleted) return 1;
-      return kTypeOrder[other.id.type]!.compareTo(kTypeOrder[id.type]!);
-    }
-  }
+  int compareTo(other) => 0;
 }
