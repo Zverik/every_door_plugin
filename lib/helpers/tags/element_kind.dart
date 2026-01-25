@@ -1,5 +1,3 @@
-import 'package:every_door_plugin/helpers/tags/element_kind_std.dart';
-import 'package:every_door_plugin/helpers/tags/main_key.dart';
 import 'package:every_door_plugin/helpers/multi_icon.dart';
 import 'package:every_door_plugin/helpers/tags/tag_matcher.dart';
 import 'package:every_door_plugin/models/amenity.dart';
@@ -80,7 +78,6 @@ class ElementKind {
 
   static void reset() {
     register(ElementKindImpl(name: 'unknown')); // by default everything matches
-    registerStandardKinds();
   }
 
   static void register(ElementKindImpl kind) {
@@ -109,22 +106,11 @@ class ElementKindImpl {
   });
 
   bool matchesTags(Map<String, String> tags) {
-    String? mainKey;
-    if (onMainKey) {
-      mainKey = getMainKey(tags);
-      if (mainKey == null) return false;
-    }
-    return matcher?.matches(tags, mainKey) ?? false;
+    return matcher?.matches(tags, null) ?? false;
   }
 
   bool matchesChange(OsmChange change) {
-    String? mainKey;
-    if (onMainKey) {
-      mainKey = change.mainKey;
-      if (mainKey == null) return false;
-    }
-
-    return matcher?.matchesChange(change, mainKey) ??
+    return matcher?.matchesChange(change, null) ??
         matchesTags(change.getFullTags());
   }
 

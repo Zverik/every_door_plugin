@@ -1,4 +1,3 @@
-import 'package:every_door_plugin/helpers/tags/main_key.dart';
 import 'package:every_door_plugin/models/amenity.dart';
 
 /// A class for matching tag lists against a set of rules.
@@ -33,47 +32,12 @@ class TagMatcher {
   ///
   /// For matching an [OsmChange] object, see [matchesChange].
   bool matches(Map<String, String> tags, [String? onlyKey]) {
-    assert(onlyKey == null || tags.containsKey(onlyKey));
-
-    final rawKey = clearPrefixNull(onlyKey);
-    if (good.contains(rawKey)) return true;
-    if (missing.any((k) => !tags.containsKey(k))) return true;
-    if (rules.isEmpty) return missing.isEmpty && good.isEmpty;
-
-    if (onlyKey != null) {
-      final rule = rules[rawKey];
-      if (rule != null && rule.matches(tags[onlyKey]!, tags)) return true;
-    } else {
-      for (final kr in rules.entries) {
-        final value = tags[kr.key];
-        if (value != null && kr.value.matches(value, tags)) return true;
-      }
-    }
-
     return false;
   }
 
   /// Tests an [OsmChange] object for a match. Performs exactly
   /// as [match], but doesn't call [OsmChange.getFullTags].
   bool matchesChange(OsmChange change, [String? onlyKey]) {
-    assert(onlyKey == null || change[onlyKey] != null);
-
-    final rawKey = clearPrefixNull(onlyKey);
-    if (good.contains(rawKey)) return true;
-    if (missing.any((k) => change[k] == null)) return true;
-    if (rules.isEmpty) return missing.isEmpty && good.isEmpty;
-
-    if (onlyKey != null) {
-      final rule = rules[rawKey];
-      if (rule != null && rule.matchesChange(change[onlyKey]!, change))
-        return true;
-    } else {
-      for (final kr in rules.entries) {
-        final value = change[kr.key];
-        if (value != null && kr.value.matchesChange(value, change)) return true;
-      }
-    }
-
     return false;
   }
 
@@ -81,18 +45,7 @@ class TagMatcher {
   /// Rules are merged using [ValueMatcher.mergeWith], [good] keys
   /// are united, [missing] set is replaced.
   TagMatcher mergeWith(TagMatcher? another) {
-    if (another == null) return this;
-
-    final newRules = Map.of(rules);
-    for (final kv in another.rules.entries) {
-      newRules[kv.key] = newRules[kv.key]?.mergeWith(kv.value) ?? kv.value;
-    }
-
-    return TagMatcher(
-      newRules,
-      good: good.union(another.good),
-      missing: another.missing,
-    );
+    return this;
   }
 
   /// Builds a class instance from a structure. It expects a plain map
@@ -140,44 +93,19 @@ class ValueMatcher {
 
   /// Tests the value to match all the rules.
   bool matches(String value, Map<String, String> tags) {
-    if (only.isNotEmpty && !(only.contains(value) || when.containsKey(value)))
-      return false;
-    if (except.isNotEmpty && except.contains(value)) return false;
-    if (!(when[value]?.matches(tags) ?? true)) return false;
-    if (when.isNotEmpty &&
-        except.isEmpty &&
-        only.isEmpty &&
-        !when.containsKey(value)) return false;
-    return true;
+    return false;
   }
 
   /// Tests an [OsmChange] object for a match. Performs exactly
   /// as [match], but doesn't call [OsmChange.getFullTags].
   bool matchesChange(String value, OsmChange change) {
-    if (only.isNotEmpty && !(only.contains(value) || when.containsKey(value)))
-      return false;
-    if (except.isNotEmpty && except.contains(value)) return false;
-    if (!(when[value]?.matchesChange(change) ?? true)) return false;
-    if (when.isNotEmpty &&
-        except.isEmpty &&
-        only.isEmpty &&
-        !when.containsKey(value)) return false;
-    return true;
+    return false;
   }
 
   /// Merge two value matchers. Used internally when updating from
   /// an external source.
   ValueMatcher mergeWith(ValueMatcher another) {
-    if (another.replace) return another;
-
-    final newWhen = Map.of(when);
-    newWhen.addAll(another.when);
-
-    return ValueMatcher(
-      except: except.union(another.except),
-      only: only.union(another.only),
-      when: newWhen,
-    );
+    return this;
   }
 
   /// Builds a class instance out of a structure. The structure
@@ -186,12 +114,15 @@ class ValueMatcher {
   factory ValueMatcher.fromJson(Map<String, dynamic> data) {
     return ValueMatcher(
       except: Set.of(
-          (data['except'] as Iterable<dynamic>?)?.whereType<String>() ??
-              const []),
-      only: Set.of((data['only'] as Iterable<dynamic>?)?.whereType<String>() ??
-          const []),
-      when: (data['when'] as Map<String, dynamic>?)
-              ?.map((k, v) => MapEntry(k, TagMatcher.fromJson(data['when']))) ??
+        (data['except'] as Iterable<dynamic>?)?.whereType<String>() ?? const [],
+      ),
+      only: Set.of(
+        (data['only'] as Iterable<dynamic>?)?.whereType<String>() ?? const [],
+      ),
+      when:
+          (data['when'] as Map<String, dynamic>?)?.map(
+            (k, v) => MapEntry(k, TagMatcher.fromJson(data['when'])),
+          ) ??
           const {},
       replace: data['replace'] ?? true,
     );

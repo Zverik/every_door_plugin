@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:every_door_plugin/helpers/tags/main_key.dart';
 import 'package:every_door_plugin/models/osm_element.dart';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
@@ -21,20 +20,21 @@ class OsmChange extends ChangeNotifier implements Comparable {
   DateTime updated;
   int? newId; // Not stored: used only during uploading.
 
-  OsmChange(OsmElement element,
-      {Map<String, String?>? newTags,
-      this.newLocation,
-      bool hardDeleted = false,
-      this.error,
-      DateTime? updated,
-      this.newNodes,
-      String? databaseId})
-      : newTags = newTags ?? {},
-        _deleted = hardDeleted,
-        updated = updated ?? DateTime.now(),
-        // ignore: prefer_initializing_formals
-        element = element, // Force non-null initialization
-        databaseId = databaseId ?? element.id.toString() {
+  OsmChange(
+    OsmElement element, {
+    Map<String, String?>? newTags,
+    this.newLocation,
+    bool hardDeleted = false,
+    this.error,
+    DateTime? updated,
+    this.newNodes,
+    String? databaseId,
+  }) : newTags = newTags ?? {},
+       _deleted = hardDeleted,
+       updated = updated ?? DateTime.now(),
+       // ignore: prefer_initializing_formals
+       element = element, // Force non-null initialization
+       databaseId = databaseId ?? element.id.toString() {
     _updateMainKey();
   }
 
@@ -45,12 +45,12 @@ class OsmChange extends ChangeNotifier implements Comparable {
     String? databaseId,
     this.error,
     this.newId,
-  })  : newTags = Map<String, String?>.of(tags),
-        newLocation = location,
-        element = null,
-        _deleted = false,
-        updated = updated ?? DateTime.now(),
-        databaseId = databaseId ?? '' {
+  }) : newTags = Map<String, String?>.of(tags),
+       newLocation = location,
+       element = null,
+       _deleted = false,
+       updated = updated ?? DateTime.now(),
+       databaseId = databaseId ?? '' {
     _updateMainKey();
   }
 
@@ -90,10 +90,7 @@ class OsmChange extends ChangeNotifier implements Comparable {
     return element!.id;
   }
 
-  bool get deleted =>
-      _deleted ||
-      (_mainKey?.startsWith(kDeleted) ?? false) ||
-      (_mainKey?.startsWith(kBuildingDeleted) ?? false);
+  bool get deleted => _deleted;
   bool get hardDeleted => _deleted;
   bool get isModified =>
       newTags.isNotEmpty ||
@@ -165,12 +162,13 @@ class OsmChange extends ChangeNotifier implements Comparable {
 
   void _updateMainKey() {
     _fullTagsCache = null;
-    _mainKey = getMainKey(getFullTags());
+    _mainKey = null;
   }
 
   int calculateAge(String? value) => DateTime.now()
       .difference(
-          DateTime.tryParse(value ?? '2020-01-01') ?? DateTime(2020, 1, 1))
+        DateTime.tryParse(value ?? '2020-01-01') ?? DateTime(2020, 1, 1),
+      )
       .inDays;
 
   // Check date management.
@@ -183,17 +181,13 @@ class OsmChange extends ChangeNotifier implements Comparable {
 
   bool isCountedOld(int age) => false;
 
-  void check() {
-  }
+  void check() {}
 
-  void uncheck() {
-  }
+  void uncheck() {}
 
-  void toggleCheck() {
-  }
+  void toggleCheck() {}
 
-  set deleted(bool value) {
-  }
+  set deleted(bool value) {}
 
   factory OsmChange.fromJson(Map<String, dynamic> data) {
     return OsmChange.create(tags: {}, location: LatLng(0, 0));
@@ -216,11 +210,9 @@ class OsmChange extends ChangeNotifier implements Comparable {
 
   bool get isDisused => false;
 
-  void togglePrefix(String prefix) {
-  }
+  void togglePrefix(String prefix) {}
 
-  void toggleDisused() {
-  }
+  void toggleDisused() {}
 
   String? get name => getAnyName() ?? this['operator'] ?? this['brand'];
 
@@ -232,11 +224,9 @@ class OsmChange extends ChangeNotifier implements Comparable {
 
   String? getContact(String key) => this[key];
 
-  void setContact(String key, String value) {
-  }
+  void setContact(String key, String value) {}
 
-  void removeOpeningHoursSigned() {
-  }
+  void removeOpeningHoursSigned() {}
 
   bool get hasPayment => false;
 

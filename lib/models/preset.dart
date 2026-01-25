@@ -4,7 +4,6 @@
 import 'dart:convert';
 import 'package:country_coder/country_coder.dart';
 import 'package:every_door_plugin/helpers/multi_icon.dart';
-import 'package:every_door_plugin/helpers/tags/main_key.dart';
 import 'package:every_door_plugin/models/amenity.dart';
 import 'package:every_door_plugin/models/field.dart';
 
@@ -47,11 +46,7 @@ class Preset {
       fields: const [],
       moreFields: const [],
       onArea: true,
-      addTags: {
-        'amenity': 'fixme',
-        'fixme': 'type',
-        'fixme:type': title,
-      },
+      addTags: {'amenity': 'fixme', 'fixme': 'type', 'fixme:type': title},
       removeTags: const {},
       name: title,
       subtitle: subtitle ?? 'fixme',
@@ -66,8 +61,10 @@ class Preset {
     final value = row['value'] as String;
     final name = value
         .split('_')
-        .map((word) =>
-            '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
+        .map(
+          (word) =>
+              '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}',
+        )
         .join(' ');
 
     return Preset(
@@ -84,7 +81,8 @@ class Preset {
   static Map<String, String?> decodeTags(Map<String, dynamic>? tags) {
     if (tags == null) return const {};
     return tags.map(
-        (key, value) => MapEntry(key, value == '*' ? null : value.toString()));
+      (key, value) => MapEntry(key, value == '*' ? null : value.toString()),
+    );
   }
 
   static Map<String, String> decodeTagsSkipNull(Map<String, dynamic>? tags) {
@@ -101,48 +99,17 @@ class Preset {
       id: data['name'],
       onArea: data['can_area'] == 1,
       addTags: decodeTagsSkipNull(
-          data['add_tags'] != null ? jsonDecode(data['add_tags']) : null),
+        data['add_tags'] != null ? jsonDecode(data['add_tags']) : null,
+      ),
       removeTags: decodeTagsSkipNull(
-          data['remove_tags'] != null ? jsonDecode(data['remove_tags']) : null),
-      icon: _resolveIcon(data['imageURL'] ?? data['icon'])
-          ?.withTooltip(data['loc_name'] ?? data['name']),
+        data['remove_tags'] != null ? jsonDecode(data['remove_tags']) : null,
+      ),
+      icon: null,
       locationSet: data['locations'] == null
           ? null
           : LocationSet.fromJson(jsonDecode(data['locations'])),
       name: data['loc_name'],
     );
-  }
-
-  static MultiIcon? _resolveIcon(Object? url) {
-    if (url == null || url is! String) return null;
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return MultiIcon(imageUrl: url);
-    }
-
-    final dashPos = url.indexOf('-');
-    if (dashPos > 0) {
-      final typ = url.substring(0, dashPos);
-      final icon = url.substring(dashPos + 1);
-      if (typ == 'maki') {
-        return MultiIcon(
-            imageUrl:
-                'https://raw.githubusercontent.com/mapbox/maki/refs/heads/main/icons/$icon.svg');
-      } else if (typ == 'temaki') {
-        return MultiIcon(
-            imageUrl:
-                'https://raw.githubusercontent.com/rapideditor/temaki/refs/heads/main/icons/$icon.svg');
-      } else if (typ == 'roentgen') {
-        return MultiIcon(
-            imageUrl:
-                'https://raw.githubusercontent.com/openstreetmap/iD/refs/heads/develop/svg/roentgen/$icon.svg');
-      } else if (typ == 'fas') {
-        return MultiIcon(
-            imageUrl:
-                'https://raw.githubusercontent.com/openstreetmap/iD/refs/heads/develop/svg/fontawesome/$url.svg');
-      }
-    }
-
-    return null;
   }
 
   factory Preset.fromNSIJson(Map<String, dynamic> data) {
@@ -160,9 +127,7 @@ class Preset {
 
   String get subtitle {
     if (_subtitle != null) return _subtitle;
-    final key = getMainKey(addTags);
-    if (key == null) return '';
-    return '$key=${addTags[key]}';
+    return '';
   }
 
   bool get isGeneric => addTags.isEmpty || addTags.entries.first.value == "*";
@@ -201,27 +166,9 @@ class Preset {
     );
   }
 
-  void doAddTags(OsmChange change) {
-    final mainKey = getMainKey(addTags);
-    addTags.forEach((key, value) {
-      if (value == '*') return;
-      // Prevent changing tag values that have been entered by hand.
-      // We don't know that for sure for old objects though.
-      if (change[key] != null &&
-          (!change.isNew && change.changedTag(key)) &&
-          mainKey != key) return;
-      change[key] = value;
-    });
-  }
+  void doAddTags(OsmChange change) {}
 
-  void doRemoveTags(OsmChange change) {
-    final tags = removeTags.isEmpty ? addTags : removeTags;
-    tags.forEach((key, value) {
-      if (change[key] != null) {
-        if (value == '*' || value == change[key]) change.removeTag(key);
-      }
-    });
-  }
+  void doRemoveTags(OsmChange change) {}
 
   @override
   bool operator ==(Object other) => other is Preset && other.id == id;

@@ -70,6 +70,41 @@ It can include other dart files from the same directory or sub-directories.
 Besides `flutter` and `every_door_plugin` packages, you can also use anything
 listed in [this description](https://pub.dev/packages/flutter_map_eval).
 
+## Hints for writing a plugin in Dart
+
+Alas there is no simple way to upload your built `.edp` file to the device and
+immediately open in in Every Door. Android permission system (not to speak of iOS)
+forbids all the options. There are two ways for testing:
+
+* Share the file via a messenger or a sync service like KDE Connect, and having received
+  the file on the device, open it with Every Door. Always check the system log.
+* Set up the [development environment](https://every-door.app/develop/build/)
+  and write your plugin in the `lib/plugins/_construction.dart`. That way you would
+  only need to disable-enable plugin after a hot reload. When finished, transfer
+  the code to a separate repository and split it into files if needed.
+
+The `dart_eval` compiler supports just a subset of Dart language, and often an unexpected
+subset. You might need to make multiple iterations to just ensure the code compiles and
+executes correctly in Every Door. Sorry about that, we are working on improving the compiler.
+But compilers are hard.
+
+Here are some hints for tracking and fixing compilation issues:
+
+* The implied `dynamic` type is hard to work with, so please state parameter, field, and
+  variable types in the code. Even for simple definitions like `final FocusNode node = FocusNode()`.
+  Most execution errors come from trying to box/unbox dynamic variables.
+* Generics are not always parsed properly. Which means, accessing `widget.` fields from a widget
+  state may randomly fail. You might need to explicitly define the types.
+* All event listeners and most other things are `async` and should return a `Future`. There is
+  no `FutureOr` class in `dart_eval`.
+* Loop and condition variables in list comprehension might confuse their scope. Try extracting
+  loop body to a function, and localize class fields. Scopes are hard.
+* Overriding of operators and sometimes `toString` doesn't yet work in `dart_eval`.
+
+There might be other causes for errors, including incorrect wrappers built-in into the editor.
+When you're stuck, contact Ilya or create an issue somewhere related, copying the relevant
+code and the full exception message, including the runtime code.
+
 ## Building a plugin
 
 Having added this package as a dependency, type this in the console (e.g. in Android Studio
